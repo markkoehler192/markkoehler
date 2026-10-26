@@ -146,40 +146,107 @@ export const praesentationen: Praesentation[] = [
   { projekt: "Jahresplanung", titel: "Markenauftritt 2027", meta: "36 Folien · besprochen am 12.09.", status: "Abgeschlossen" },
 ];
 
-export const kennzahlen = [
-  { titel: "So viele haben euch gesehen", wert: "248 Tsd.", delta: "+18 % mehr als letzten Monat", info: "Reichweite: so viele verschiedene Leute haben mindestens einen eurer Beiträge gesehen." },
-  { titel: "Von 100 Leuten haben 5 reagiert", wert: "5,2 %", delta: "Like, Kommentar oder Teilen · +0,8 Punkte", info: "Engagement: der Anteil der Leute, die nicht nur geschaut, sondern auch reagiert haben." },
-  { titel: "Klicks in euren Shop", wert: "3.410", delta: "+24 % mehr als letzten Monat", info: "So oft wurde von Social Media aus euer Shop geöffnet." },
-  { titel: "Neue Follower", wert: "1.180", delta: "+9 % mehr als letzten Monat", info: "So viele Leute folgen euch neu." },
-];
+// LIVE: Kennzahlen, Verlauf und Top-Posts je Channel. "Alle" ist die Summe über alle Channels.
+export const kanaele = ["Alle", "Meta", "TikTok", "YouTube", "LinkedIn"] as const;
+export type Kanal = (typeof kanaele)[number];
 
-// Reichweite pro Woche in Tausend (KW 33 bis 44)
-export const reichweiteProWoche = [12, 16.8, 15.2, 22, 19.2, 28, 25.6, 36, 32.8, 41, 30.4, 35.2].map((wert, i) => ({
-  kw: 33 + i,
-  wert,
-}));
-
-export const topPosts = [
-  { titel: "Reel „Blütezeit“", wert: "92 Tsd. Leute gesehen" },
-  { titel: "Post Ringelblumen-Creme", wert: "6,8 % haben reagiert" },
-  { titel: "Story Kräutergarten", wert: "1.240 Klicks in den Shop" },
-];
-
-export type PlanPost = {
-  tag: string;
-  art?: "Reel" | "Post" | "Story";
-  titel?: string;
-  status?: "Geplant" | "Vorschlag";
+export const kanalInfo: Record<Exclude<Kanal, "Alle">, string> = {
+  Meta: "Instagram und Facebook",
+  TikTok: "TikTok",
+  YouTube: "YouTube und Shorts",
+  LinkedIn: "LinkedIn",
 };
 
-export const socialPlanung: PlanPost[] = [
-  { tag: "Mo 27.", art: "Reel", titel: "Anwendung Creme", status: "Geplant" },
-  { tag: "Di 28." },
-  { tag: "Mi 29.", art: "Post", titel: "Inhaltsstoff Calendula", status: "Vorschlag" },
-  { tag: "Do 30.", art: "Story", titel: "Blick in die Manufaktur", status: "Geplant" },
-  { tag: "Fr 31.", art: "Post", titel: "Gewinnspiel Geschenkset", status: "Vorschlag" },
-  { tag: "Sa 1." },
-  { tag: "So 2.", art: "Story", titel: "Sonntagsritual", status: "Vorschlag" },
+type Kennzahl = { titel: string; wert: string; delta: string; info: string };
+
+const kz = (gesehen: string, dGesehen: string, reagiert: string, quote: string, dQuote: string, klicks: string, dKlicks: string, follower: string, dFollower: string): Kennzahl[] => [
+  { titel: "So viele haben euch gesehen", wert: gesehen, delta: dGesehen, info: "Reichweite: so viele verschiedene Leute haben mindestens einen eurer Beiträge gesehen." },
+  { titel: `Von 100 Leuten haben ${reagiert} reagiert`, wert: quote, delta: `Like, Kommentar oder Teilen · ${dQuote}`, info: "Engagement: der Anteil der Leute, die nicht nur geschaut, sondern auch reagiert haben." },
+  { titel: "Klicks in euren Shop", wert: klicks, delta: dKlicks, info: "So oft wurde von diesem Channel aus euer Shop geöffnet." },
+  { titel: "Neue Follower", wert: follower, delta: dFollower, info: "So viele Leute folgen euch neu." },
+];
+
+export const kennzahlenJeKanal: Record<Kanal, Kennzahl[]> = {
+  Alle: kz("248 Tsd.", "+18 % mehr als letzten Monat", "5", "5,2 %", "+0,8 Punkte", "3.410", "+24 % mehr als letzten Monat", "1.180", "+9 % mehr als letzten Monat"),
+  Meta: kz("131 Tsd.", "+12 % mehr als letzten Monat", "5", "4,9 %", "+0,4 Punkte", "2.150", "+19 % mehr als letzten Monat", "540", "+6 % mehr als letzten Monat"),
+  TikTok: kz("82 Tsd.", "+41 % mehr als letzten Monat", "7", "7,1 %", "+1,9 Punkte", "690", "+52 % mehr als letzten Monat", "470", "+28 % mehr als letzten Monat"),
+  YouTube: kz("24 Tsd.", "+6 % mehr als letzten Monat", "3", "3,4 %", "+0,2 Punkte", "320", "+8 % mehr als letzten Monat", "95", "+4 % mehr als letzten Monat"),
+  LinkedIn: kz("11 Tsd.", "−3 % weniger als letzten Monat", "4", "3,8 %", "−0,1 Punkte", "250", "+2 % mehr als letzten Monat", "75", "+11 % mehr als letzten Monat"),
+};
+
+// Reichweite pro Woche in Tausend (KW 33 bis 44)
+const wochen = (werte: number[]) => werte.map((wert, i) => ({ kw: 33 + i, wert }));
+export const reichweiteJeKanal: Record<Kanal, { kw: number; wert: number }[]> = {
+  Alle: wochen([12, 16.8, 15.2, 22, 19.2, 28, 25.6, 36, 32.8, 41, 30.4, 35.2]),
+  Meta: wochen([7.4, 9.6, 8.8, 12.4, 10.8, 15, 13.6, 19.2, 17, 21.4, 16.2, 18.6]),
+  TikTok: wochen([2, 3.6, 3.2, 5.4, 4.8, 8, 7.6, 11.4, 10.6, 14, 9.8, 11.8]),
+  YouTube: wochen([1.6, 2.4, 2.2, 2.8, 2.4, 3.4, 3, 3.8, 3.6, 3.9, 3, 3.2]),
+  LinkedIn: wochen([1, 1.2, 1, 1.4, 1.2, 1.6, 1.4, 1.6, 1.6, 1.7, 1.4, 1.6]),
+};
+
+export const topPostsJeKanal: Record<Kanal, { titel: string; wert: string; kanal: Exclude<Kanal, "Alle"> }[]> = {
+  Alle: [
+    { titel: "Reel „Blütezeit“", wert: "92 Tsd. Leute gesehen", kanal: "Meta" },
+    { titel: "TikTok „Eincremen in 15 Sek“", wert: "7,9 % haben reagiert", kanal: "TikTok" },
+    { titel: "Story Kräutergarten", wert: "1.240 Klicks in den Shop", kanal: "Meta" },
+  ],
+  Meta: [
+    { titel: "Reel „Blütezeit“", wert: "92 Tsd. Leute gesehen", kanal: "Meta" },
+    { titel: "Post Ringelblumen-Creme", wert: "6,8 % haben reagiert", kanal: "Meta" },
+    { titel: "Story Kräutergarten", wert: "1.240 Klicks in den Shop", kanal: "Meta" },
+  ],
+  TikTok: [
+    { titel: "TikTok „Eincremen in 15 Sek“", wert: "7,9 % haben reagiert", kanal: "TikTok" },
+    { titel: "TikTok „Ringelblume ernten“", wert: "38 Tsd. Leute gesehen", kanal: "TikTok" },
+    { titel: "TikTok „Hautpflege-Mythen“", wert: "410 Klicks in den Shop", kanal: "TikTok" },
+  ],
+  YouTube: [
+    { titel: "Short „Manufaktur in 60 Sek“", wert: "11 Tsd. Leute gesehen", kanal: "YouTube" },
+    { titel: "Video „So entsteht die Creme“", wert: "4:12 Min. im Schnitt geschaut", kanal: "YouTube" },
+    { titel: "Short „Calendula erklärt“", wert: "160 Klicks in den Shop", kanal: "YouTube" },
+  ],
+  LinkedIn: [
+    { titel: "Post „Nachhaltige Lieferkette“", wert: "4,6 % haben reagiert", kanal: "LinkedIn" },
+    { titel: "Post „Neue Kolleg:innen in der Manufaktur“", wert: "3.800 Leute gesehen", kanal: "LinkedIn" },
+    { titel: "Artikel „20 Jahre WILDBLATT“", wert: "90 Klicks auf die Website", kanal: "LinkedIn" },
+  ],
+};
+
+export const topHinweisJeKanal: Record<Kanal, string> = {
+  Alle: "Das Reel lief 3x besser als üblich. Daraus eine Serie machen?",
+  Meta: "Das Reel lief 3x besser als üblich. Daraus eine Serie machen?",
+  TikTok: "TikTok wächst am schnellsten. Lohnt sich ein zweites Video pro Woche?",
+  YouTube: "Shorts holen mehr Leute als lange Videos. Mehr Shorts aus dem Reel-Material?",
+  LinkedIn: "Themen aus der Manufaktur kommen hier gut an. Eine kleine Serie dazu?",
+};
+
+export type PlanPost = {
+  kanal: Exclude<Kanal, "Alle">;
+  art: "Reel" | "Post" | "Story" | "Video" | "Short";
+  titel: string;
+  status: "Geplant" | "Vorschlag";
+};
+
+export const socialPlanung: { tag: string; posts: PlanPost[] }[] = [
+  { tag: "Mo 27.", posts: [{ kanal: "Meta", art: "Reel", titel: "Anwendung Creme", status: "Geplant" }] },
+  { tag: "Di 28.", posts: [{ kanal: "LinkedIn", art: "Post", titel: "Ein Tag in der Manufaktur", status: "Geplant" }] },
+  {
+    tag: "Mi 29.",
+    posts: [
+      { kanal: "Meta", art: "Post", titel: "Inhaltsstoff Calendula", status: "Vorschlag" },
+      { kanal: "TikTok", art: "Video", titel: "Calendula in 15 Sek", status: "Vorschlag" },
+    ],
+  },
+  { tag: "Do 30.", posts: [{ kanal: "Meta", art: "Story", titel: "Blick in die Manufaktur", status: "Geplant" }] },
+  {
+    tag: "Fr 31.",
+    posts: [
+      { kanal: "Meta", art: "Post", titel: "Gewinnspiel Geschenkset", status: "Vorschlag" },
+      { kanal: "YouTube", art: "Short", titel: "Geschenkset auspacken", status: "Geplant" },
+    ],
+  },
+  { tag: "Sa 1.", posts: [{ kanal: "TikTok", art: "Video", titel: "Wochenend-Routine", status: "Geplant" }] },
+  { tag: "So 2.", posts: [{ kanal: "Meta", art: "Story", titel: "Sonntagsritual", status: "Vorschlag" }] },
 ];
 
 // Durchsuchbarer Index für die globale Suche (Prototyp).
@@ -207,3 +274,31 @@ export const suchIndex: Treffer[] = [
   { bereich: "Studio", titel: "Format-Anpasser", meta: "Ein Motiv, alle Formate: Feed, Story, Profilbild", typ: "Studio", href: "/studio", stichworte: "format anpasser instagram profilbild story feed logo zuschneiden" },
   { bereich: "Studio", titel: "Markentexter", meta: "Texte für jeden Kanal, in eurer Markensprache", typ: "Studio", href: "/studio/markentexter", stichworte: "markentexter text post creme instagram newsletter" },
 ];
+
+// Projekte als erste Ebene in Projects. Assets und Präsentationen hängen über den Projektnamen dran.
+export type Projekt = {
+  slug: string;
+  name: string;
+  art: string;
+  text: string;
+  zeitraum: string;
+  status: "Feedback offen" | "In Arbeit" | "Abgeschlossen";
+  briefing?: { text: string; offen: number };
+};
+
+export const projekte: Projekt[] = [
+  { slug: "ringelblume-2026", name: "Ringelblume 2026", art: "Kampagne", text: "Launch der Ringelblumen-Creme: Social, Plakat, Drogerie.", zeitraum: "Okt. bis Dez. 2026", status: "Feedback offen" },
+  { slug: "geschenksets", name: "Geschenksets", art: "Kampagne", text: "Weihnachtsgeschäft: Newsletter und Story-Serie.", zeitraum: "Nov. bis Dez. 2026", status: "Feedback offen" },
+  {
+    slug: "rosen-gesichtsoel",
+    name: "Rosen-Gesichtsöl",
+    art: "Launch",
+    text: "Neues Rosen-Gesichtsöl, Launch im Frühjahr.",
+    zeitraum: "Frühjahr 2027",
+    status: "In Arbeit",
+    briefing: { text: "Briefing läuft, 3 Fragen offen", offen: 3 },
+  },
+  { slug: "jahresplanung", name: "Jahresplanung", art: "Strategie", text: "Markenauftritt und Kampagnenplan für 2027.", zeitraum: "2027", status: "Abgeschlossen" },
+];
+
+export const projektVonName = (name: string) => projekte.find((p) => p.name === name);
