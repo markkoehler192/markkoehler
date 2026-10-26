@@ -60,7 +60,7 @@ export function Markentexter() {
       </div>
 
       {zustand === "laedt" ? (
-        <LoadingState titel="Dein Text entsteht …" text="Der Markentexter liest eure Markensprache und schreibt. Dauert etwa 10 Sekunden." />
+        <LoadingState titel="Dein Text entsteht …" text="Der KI-Markentexter liest eure Markensprache und schreibt. Dauert etwa 10 Sekunden." />
       ) : zustand === "fehler" ? (
         <ErrorState text="Der Text konnte gerade nicht erstellt werden. Dein Auftrag ist gespeichert." onRetry={erstellen} />
       ) : (

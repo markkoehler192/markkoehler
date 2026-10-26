@@ -12,7 +12,7 @@ export function ToolAnfragen({ tool, modus, children }: { tool?: Tool; modus: "v
       <button
         className="card card-link tool"
         style={{ textAlign: "left" }}
-        onClick={() => toast({ titel: `${tool?.name} öffnet bald`, text: "Im Prototyp ist nur der Markentexter ausgebaut." })}
+        onClick={() => toast({ titel: `${tool?.name} öffnet bald`, text: "Im Prototyp ist nur der KI-Markentexter ausgebaut." })}
       >
         {children}
       </button>

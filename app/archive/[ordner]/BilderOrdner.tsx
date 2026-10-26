@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { AnsichtUmschalter, useAnsicht } from "@/components/Ansicht";
 import { ArchiveSearch } from "@/components/ArchiveSearch";
 import { Chips } from "@/components/Chips";
 import { FolderIcon } from "@/components/Icons";
@@ -18,6 +19,7 @@ export function BilderOrdner() {
   const [q, setQ] = useState("");
   const [unterordner, setUnterordner] = useState<string | null>(null);
   const [auswahl, setAuswahl] = useState<string[]>([]);
+  const [ansicht, setAnsicht] = useAnsicht();
 
   const liste = useMemo(
     () =>
@@ -54,25 +56,47 @@ export function BilderOrdner() {
         <ArchiveSearch placeholder="In Bilder suchen …" value={q} onSearch={setQ} />
       </div>
 
-      <div className="breadcrumb">
-        Archive / {unterordner ? <>Bilder / <b>{unterordner}</b></> : <b>Bilder</b>}
+      <div className="row wrap gap-16" style={{ justifyContent: "space-between" }}>
+        <div className="breadcrumb">
+          Archive / {unterordner ? <>Bilder / <b>{unterordner}</b></> : <b>Bilder</b>}
+        </div>
+        <AnsichtUmschalter ansicht={ansicht} onChange={setAnsicht} />
       </div>
 
-      <div className="grid grid-4">
-        {bilderUnterordner.map((u) => (
-          <button
-            key={u.name}
-            className="card card-link subfolder"
-            aria-pressed={unterordner === u.name}
-            style={unterordner === u.name ? { borderColor: "var(--white)" } : undefined}
-            onClick={() => setUnterordner(unterordner === u.name ? null : u.name)}
-          >
-            <FolderIcon size={24} />
-            <span className="bold" style={{ color: "var(--white)" }}>{u.name}</span>
-            <span className="small muted" style={{ marginLeft: "auto" }}>{u.anzahl}</span>
-          </button>
-        ))}
-      </div>
+      {ansicht === "kacheln" ? (
+        <div className="grid grid-4">
+          {bilderUnterordner.map((u) => (
+            <button
+              key={u.name}
+              className="card card-link subfolder"
+              aria-pressed={unterordner === u.name}
+              style={unterordner === u.name ? { borderColor: "var(--white)" } : undefined}
+              onClick={() => setUnterordner(unterordner === u.name ? null : u.name)}
+            >
+              <FolderIcon size={24} />
+              <span className="bold" style={{ color: "var(--white)" }}>{u.name}</span>
+              <span className="small muted" style={{ marginLeft: "auto" }}>{u.anzahl}</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="liste">
+          {bilderUnterordner.map((u) => (
+            <button
+              key={u.name}
+              className={`liste-zeile${unterordner === u.name ? " is-selected" : ""}`}
+              aria-pressed={unterordner === u.name}
+              onClick={() => setUnterordner(unterordner === u.name ? null : u.name)}
+            >
+              <span className="liste-icon"><FolderIcon size={24} /></span>
+              <span className="liste-name">{u.name}</span>
+              <span className="liste-text nur-breit" />
+              <span className="liste-text nur-breit">{u.anzahl} Bilder</span>
+              <span className="liste-ende muted" aria-hidden>→</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="row wrap gap-16" style={{ justifyContent: "space-between" }}>
         <Chips options={filter} value={f} onChange={setF} label="Bilder filtern" />
@@ -88,7 +112,39 @@ export function BilderOrdner() {
         </div>
       </div>
 
-      {liste.length ? (
+      {liste.length && ansicht === "liste" ? (
+        <div className="liste">
+          <div className="liste-kopf label">
+            <span />
+            <span>Name</span>
+            <span className="nur-breit">Ordner</span>
+            <span className="nur-breit">Format</span>
+            <span />
+          </div>
+          {liste.map((b) => (
+            <div key={b.name} className="liste-zeile">
+              <input
+                type="checkbox"
+                aria-label={`${b.name} auswählen`}
+                checked={auswahl.includes(b.name)}
+                onChange={() => toggle(b.name)}
+              />
+              <span className="row gap-12" style={{ minWidth: 0 }}>
+                <span className="liste-thumb" aria-hidden />
+                <span className="liste-name">{b.name}</span>
+              </span>
+              <span className="liste-text nur-breit">{b.ordner}</span>
+              <span className="liste-text nur-breit">
+                {b.format === "quer" ? "Querformat" : "Hochformat"}{b.freigestellt ? " · freigestellt" : ""}
+              </span>
+              <span className="liste-ende">
+                {b.neu ? <span className="neu-hinweis">neu</span> : null}
+                <button className="link-lime" onClick={() => download([b.name])}>Download</button>
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : liste.length ? (
         <div className="grid grid-4">
           {liste.map((b) => (
             <div key={b.name} className="img-card">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
-import { assets } from "@/lib/data";
+import { assets, projektVonName } from "@/lib/data";
 import { Review } from "./Review";
 
 export function generateStaticParams() {
@@ -13,10 +13,11 @@ export default async function ReviewSeite({ params }: { params: Promise<{ slug: 
   const a = assets.find((x) => x.slug === slug);
   if (!a) notFound();
   const version = a.meta.split(" · ").pop();
+  const projekt = projektVonName(a.projekt);
   return (
     <Shell>
       <div className="stack gap-12">
-        <Link href="/projects" className="back">← Projects</Link>
+        <Link href={projekt ? `/projects/${projekt.slug}` : "/projects"} className="back">← {a.projekt}</Link>
         <h1 className="h1">{a.titel}</h1>
         <p className="sub" style={{ marginTop: 0 }}>
           {a.projekt} · {a.meta.split(" · ").slice(0, 2).join(" ")} · {version?.replace("V", "Version ")} ·{" "}

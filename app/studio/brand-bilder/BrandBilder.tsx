@@ -108,7 +108,7 @@ export function BrandBilder() {
       </div>
 
       {zustand === "laedt" ? (
-        <LoadingState titel="Deine Bilder entstehen …" text="Brand-Bilder nimmt eure Farbwelt und eure Produktbilder und baut 4 Vorschläge. Dauert etwa 30 Sekunden." />
+        <LoadingState titel="Deine Bilder entstehen …" text="KI-Brand-Bilder nimmt eure Farbwelt und eure Produktbilder und baut 4 Vorschläge. Dauert etwa 30 Sekunden." />
       ) : zustand === "fehler" ? (
         <ErrorState text="Die Bilder konnten gerade nicht erstellt werden. Dein Auftrag ist gespeichert." onRetry={() => erstellen()} />
       ) : (

@@ -1,16 +1,20 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { Shell } from "@/components/Shell";
-import { ProjectsListe } from "./ProjectsListe";
+import { ProjektUebersicht } from "./ProjektUebersicht";
 
 export default function Projects() {
   return (
     <Shell>
-      <div>
-        <h1 className="h1">Projects</h1>
-        <p className="sub">Laufende Kampagnen-Assets und Präsentationen, die auf euer Feedback warten.</p>
+      <div className="head-row">
+        <div>
+          <h1 className="h1">Projects</h1>
+          <p className="sub">Eure Projekte mit KURIOS. Wähl ein Projekt, um Assets und Präsentationen zu sehen und Feedback zu geben.</p>
+        </div>
+        <Link href="/projects/briefing" className="btn btn-primary">+ Neues Briefing</Link>
       </div>
       <Suspense>
-        <ProjectsListe />
+        <ProjektUebersicht />
       </Suspense>
     </Shell>
   );

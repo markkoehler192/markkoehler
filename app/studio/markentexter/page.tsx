@@ -7,7 +7,7 @@ export default function MarkentexterSeite() {
     <Shell>
       <div className="stack gap-12">
         <Link href="/studio" className="back">← Studio</Link>
-        <h1 className="h1">Markentexter</h1>
+        <h1 className="h1">KI-Markentexter</h1>
         <div className="row wrap gap-8">
           <span className="sub" style={{ margin: 0 }}>Schreibt in eurer Markensprache. Nutzt:</span>
           {["Markensprache", "Produktinfos", "CI"].map((m) => (
