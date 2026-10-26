@@ -32,7 +32,7 @@ export default function Studio() {
               </div>
             </>
           );
-          // Im Prototyp ist nur der Markentexter ausgebaut.
+          // Im Prototyp sind Markentexter und Brand-Bilder ausgebaut.
           return t.href ? (
             <Link key={t.slug} href={t.href} className="card card-link tool">{inhalt}</Link>
           ) : (

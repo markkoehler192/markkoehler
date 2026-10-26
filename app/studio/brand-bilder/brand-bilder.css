@@ -1,0 +1,62 @@
+/* ---------- Brand-Bilder (Studio) ----------
+   Eigene Datei, damit globals.css nicht angefasst wird. */
+.bb-check { color: var(--lime); font-weight: var(--w-bold); }
+
+.bb-gross { display: flex; justify-content: center; background: var(--field); border-radius: 14px; padding: 24px; }
+.bb-gross-bild { width: 100%; position: relative; }
+.bb-titel {
+  position: absolute; left: 16px; bottom: 16px; padding: 6px 12px; border-radius: 999px;
+  background: #000; color: var(--white); font-weight: var(--w-bold); font-size: 12px;
+}
+
+.bb-auswahl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: start; }
+.bb-thumb { border: 2px solid transparent; border-radius: 12px; padding: 3px; transition: border-color .15s; }
+.bb-thumb:hover { border-color: var(--line); }
+.bb-thumb.is-selected { border-color: var(--lime); }
+.bb-thumb .bb-szene { border-radius: 8px; }
+
+/* Gezeichnete Szene. Größen in cqw, damit sie mit der Bildbreite skaliert. */
+.bb-szene { container-type: inline-size; position: relative; width: 100%; overflow: hidden; border-radius: 12px; }
+.bb-licht { position: absolute; inset: 0; }
+.bb-flaeche { position: absolute; left: 0; right: 0; bottom: 0; box-shadow: inset 0 3cqw 6cqw rgba(0,0,0,.18); }
+.bb-bluete {
+  position: absolute; width: 9cqw; height: 9cqw; border-radius: 50%; transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle, #7a4310 0 22%, transparent 24%),
+    conic-gradient(from 10deg, var(--bluete) 0 8%, transparent 8% 12.5%, var(--bluete) 12.5% 20.5%, transparent 20.5% 25%,
+      var(--bluete) 25% 33%, transparent 33% 37.5%, var(--bluete) 37.5% 45.5%, transparent 45.5% 50%,
+      var(--bluete) 50% 58%, transparent 58% 62.5%, var(--bluete) 62.5% 70.5%, transparent 70.5% 75%,
+      var(--bluete) 75% 83%, transparent 83% 87.5%, var(--bluete) 87.5% 95.5%, transparent 95.5%);
+  -webkit-mask: radial-gradient(circle, #000 68%, transparent 70%);
+  mask: radial-gradient(circle, #000 68%, transparent 70%);
+}
+.bb-produkt { position: absolute; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; }
+.bb-schatten { width: 130%; height: 2.4cqw; margin-top: -1.2cqw; border-radius: 50%; background: rgba(0,0,0,.28); filter: blur(1cqw); }
+
+.bb-tiegel, .bb-flasche, .bb-dose, .bb-tube { position: relative; display: block; z-index: 1; background: var(--farbe); }
+.bb-produkt i { position: absolute; display: block; }
+
+/* Creme-Tiegel: Deckel oben, Etikett-Band */
+.bb-tiegel { width: 26cqw; height: 14cqw; border-radius: 1.5cqw 1.5cqw 2.5cqw 2.5cqw; box-shadow: inset -3cqw 0 4cqw rgba(0,0,0,.12); }
+.bb-tiegel::before { content: ""; position: absolute; left: -1cqw; right: -1cqw; top: -5cqw; height: 5.5cqw; border-radius: 1.5cqw; background: var(--akzent); box-shadow: inset -3cqw 0 4cqw rgba(0,0,0,.15); }
+.bb-tiegel i { left: 0; right: 0; top: 4.5cqw; height: 4.5cqw; background: var(--akzent); opacity: .85; }
+
+/* Öl-Flasche mit Pipette */
+.bb-flasche { width: 15cqw; height: 28cqw; border-radius: 3cqw 3cqw 1.5cqw 1.5cqw; box-shadow: inset -2cqw 0 3cqw rgba(0,0,0,.2); }
+.bb-flasche::before { content: ""; position: absolute; left: 4.5cqw; right: 4.5cqw; top: -8cqw; height: 9cqw; border-radius: 2.5cqw 2.5cqw .5cqw .5cqw; background: #2b2420; }
+.bb-flasche i { left: 2cqw; right: 2cqw; top: 10cqw; height: 10cqw; border-radius: .6cqw; background: var(--akzent); }
+
+/* Balsam-Dose, flach */
+.bb-dose { width: 24cqw; height: 8cqw; border-radius: 1cqw 1cqw 2cqw 2cqw; box-shadow: inset -3cqw 0 4cqw rgba(0,0,0,.15); }
+.bb-dose::before { content: ""; position: absolute; left: 0; right: 0; top: -1.6cqw; height: 3cqw; border-radius: 50%; background: var(--farbe); filter: brightness(1.1); }
+.bb-dose i { left: 6cqw; right: 6cqw; top: 2.5cqw; height: 3cqw; border-radius: .5cqw; background: var(--akzent); }
+
+/* Lotion-Tube, stehend */
+.bb-tube { width: 14cqw; height: 34cqw; border-radius: 1cqw 1cqw 2cqw 2cqw; clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%); box-shadow: inset -2cqw 0 3cqw rgba(0,0,0,.12); }
+.bb-tube i { left: 0; right: 0; top: 0; height: 3cqw; background: var(--akzent); }
+.bb-tube::after { content: ""; position: absolute; left: 1.5cqw; right: 1.5cqw; top: 11cqw; height: 11cqw; border-radius: .6cqw; background: var(--akzent); opacity: .7; }
+
+@media (max-width: 760px) {
+  .bb-auswahl { grid-template-columns: repeat(2, 1fr); }
+  .bb-gross { padding: 12px; }
+}
