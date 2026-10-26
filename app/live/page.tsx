@@ -1,10 +1,12 @@
 import { Shell } from "@/components/Shell";
+import { getSprache } from "@/lib/sprache-server";
 import { Live } from "./Live";
 
-export default function LiveSeite() {
+export default async function LiveSeite() {
+  const { s } = await getSprache();
   return (
     <Shell>
-      <Live />
+      <Live key={s} />
     </Shell>
   );
 }

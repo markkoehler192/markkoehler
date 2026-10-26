@@ -6,11 +6,13 @@ export function Chips<T extends string>({
   value,
   onChange,
   label,
+  anzeige,
 }: {
   options: readonly T[];
   value: T;
   onChange: (v: T) => void;
   label: string;
+  anzeige?: (o: T) => string;
 }) {
   return (
     <div className="row wrap gap-8" role="radiogroup" aria-label={label}>
@@ -23,7 +25,7 @@ export function Chips<T extends string>({
           className={`pill${o === value ? " is-selected" : ""}`}
           onClick={() => onChange(o)}
         >
-          {o}
+          {anzeige ? anzeige(o) : o}
         </button>
       ))}
     </div>

@@ -5,14 +5,16 @@ import { useState } from "react";
 import { AnsichtUmschalter, useAnsicht } from "@/components/Ansicht";
 import { Chips } from "@/components/Chips";
 import { EmptyState } from "@/components/States";
-import { assets, praesentationen, projekte } from "@/lib/data";
+import { useSprache } from "@/components/Sprache";
 import { AssetKarte, AssetZeile, PraesentationKarte, PraesentationZeile } from "../Karten";
 
 const filter = ["Alle", "Review offen", "In Arbeit", "Freigegeben"] as const;
 type Filter = (typeof filter)[number];
 
 export function ProjektDetail({ slug }: { slug: string }) {
-  const p = projekte.find((x) => x.slug === slug)!;
+  const { t, w, d } = useSprache();
+  const { assets, praesentationen } = d;
+  const p = d.projekte.find((x) => x.slug === slug)!;
   const [f, setF] = useState<Filter>("Alle");
   const [ansicht, setAnsicht] = useAnsicht();
 
@@ -29,9 +31,9 @@ export function ProjektDetail({ slug }: { slug: string }) {
           <div className="stack gap-8">
             <span className="label">Briefing</span>
             <span className="bold" style={{ color: "var(--white)", fontSize: 18 }}>{p.briefing.text}</span>
-            <span className="small muted">Der Briefing-Agent fragt nach, was noch fehlt.</span>
+            <span className="small muted">{t("Der Briefing-Agent fragt nach, was noch fehlt.", "The briefing agent asks about anything still missing.")}</span>
           </div>
-          <Link href="/projects/briefing" className="btn btn-primary">Briefing fortsetzen →</Link>
+          <Link href="/projects/briefing" className="btn btn-primary">{t("Briefing fortsetzen →", "Continue briefing →")}</Link>
         </div>
       ) : null}
 
@@ -40,7 +42,7 @@ export function ProjektDetail({ slug }: { slug: string }) {
           <div className="row wrap gap-16" style={{ justifyContent: "space-between" }}>
             <h2 className="label">Assets · {alleAssets.length}</h2>
             <div className="row wrap gap-16">
-              <Chips options={filter} value={f} onChange={setF} label="Assets filtern" />
+              <Chips options={filter} value={f} onChange={setF} label={t("Assets filtern", "Filter assets")} anzeige={w} />
               <AnsichtUmschalter ansicht={ansicht} onChange={setAnsicht} />
             </div>
           </div>
@@ -53,8 +55,8 @@ export function ProjektDetail({ slug }: { slug: string }) {
               {liste.map((a) => <AssetKarte key={a.slug} a={a} />)}
             </div>
           ) : (
-            <EmptyState titel="Keine Treffer" text="In diesem Projekt gibt es dazu gerade keine Assets.">
-              <button className="btn btn-primary" onClick={() => setF("Alle")}>Alle Assets zeigen</button>
+            <EmptyState titel={t("Keine Treffer", "No results")} text={t("In diesem Projekt gibt es dazu gerade keine Assets.", "This project has no matching assets right now.")}>
+              <button className="btn btn-primary" onClick={() => setF("Alle")}>{t("Alle Assets zeigen", "Show all assets")}</button>
             </EmptyState>
           )}
         </section>
@@ -63,7 +65,7 @@ export function ProjektDetail({ slug }: { slug: string }) {
       {praes.length ? (
         <section className="stack gap-20">
           <div className="row" style={{ justifyContent: "space-between" }}>
-            <h2 className="label">Präsentationen · {praes.length}</h2>
+            <h2 className="label">{t("Präsentationen", "Presentations")} · {praes.length}</h2>
             {!alleAssets.length ? <AnsichtUmschalter ansicht={ansicht} onChange={setAnsicht} /> : null}
           </div>
           {ansicht === "liste" ? (
@@ -79,8 +81,8 @@ export function ProjektDetail({ slug }: { slug: string }) {
       ) : null}
 
       {!alleAssets.length && !praes.length && !p.briefing ? (
-        <EmptyState text="Sobald KURIOS hier etwas für euch hat, siehst du es an dieser Stelle.">
-          <Link href="/projects/briefing" className="btn btn-primary">Briefing starten</Link>
+        <EmptyState text={t("Sobald KURIOS hier etwas für euch hat, siehst du es an dieser Stelle.", "As soon as KURIOS has something for you here, you'll see it in this spot.")}>
+          <Link href="/projects/briefing" className="btn btn-primary">{t("Briefing starten", "Start a briefing")}</Link>
         </EmptyState>
       ) : null}
     </>

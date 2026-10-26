@@ -4,21 +4,22 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SearchIcon } from "./Icons";
-
-const items = [
-  { href: "/archive", label: "Archive", tip: "Kampagnen, Assets und CI" },
-  { href: "/studio", label: "Studio", tip: "Eure KI-Tools" },
-  { href: "/projects", label: "Projects", tip: "Laufende Projekte und Reviews", badge: 2 },
-  { href: "/live", label: "Live", tip: "Performance und Social-Planung", badge: 1 },
-];
+import { useSprache } from "./Sprache";
 
 export function AreaNav() {
+  const { t } = useSprache();
+  const items = [
+    { href: "/archive", label: "Archive", tip: t("Kampagnen, Assets und CI", "Campaigns, assets and CI") },
+    { href: "/studio", label: "Studio", tip: t("Eure KI-Tools", "Your AI tools") },
+    { href: "/projects", label: "Projects", tip: t("Laufende Projekte und Reviews", "Ongoing projects and reviews"), badge: 2 },
+    { href: "/live", label: "Live", tip: t("Performance und Social-Planung", "Performance and social planning"), badge: 1 },
+  ];
   const pathname = usePathname();
   const router = useRouter();
   const [q, setQ] = useState("");
 
   return (
-    <nav className="areanav" aria-label="Bereiche">
+    <nav className="areanav" aria-label={t("Bereiche", "Areas")}>
       <div className="areanav-items">
         <Link href="/" className="areanav-home">← Start</Link>
         <span className="areanav-sep" />
@@ -50,8 +51,8 @@ export function AreaNav() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Überall suchen oder fragen …"
-          aria-label="Überall suchen oder fragen"
+          placeholder={t("Überall suchen oder fragen …", "Search or ask anything …")}
+          aria-label={t("Überall suchen oder fragen", "Search or ask anything")}
         />
       </form>
     </nav>

@@ -5,24 +5,31 @@ import { AnsichtUmschalter, useAnsicht } from "@/components/Ansicht";
 import { ArrowTool } from "@/components/Icons";
 import { useToast } from "@/components/Toast";
 import { ToolAnfragen } from "@/components/ToolAnfragen";
-import { aktiveTools, weitereTools, type Tool } from "@/lib/data";
+import { useSprache } from "@/components/Sprache";
+import type { Tool } from "@/lib/data";
 
-// Geschützter Bindestrich, damit „KI-“ in den Kacheln nicht allein in der ersten Zeile steht.
-const titel = (name: string) => name.replace(/^KI-/, "KI\u2011");
+// Geschützter Bindestrich bzw. Leerzeichen, damit „KI-“/„AI“ in den Kacheln nicht allein in der ersten Zeile steht.
+const titel = (name: string) => name.replace(/^KI-/, "KI\u2011").replace(/^AI /, "AI\u00a0");
 
 export function StudioTools() {
   const [ansicht, setAnsicht] = useAnsicht();
   const toast = useToast();
+  const { t: tx, d } = useSprache();
+  const { aktiveTools, weitereTools } = d;
 
-  const oeffnen = (t: Tool) => toast({ titel: `${t.name} öffnet bald`, text: "Dieses Tool ist im Prototyp noch nicht ausgebaut." });
+  const oeffnen = (t: Tool) =>
+    toast({ titel: tx(`${t.name} öffnet bald`, `${t.name} is coming soon`), text: tx("Dieses Tool ist im Prototyp noch nicht ausgebaut.", "This tool isn't built out in the prototype yet.") });
   const anfragen = (name: string) =>
-    toast({ titel: "Anfrage gesendet", text: `Lena meldet sich zu „${name}“ und bespricht mit euch, was das Tool können soll.` });
+    toast({
+      titel: tx("Anfrage gesendet", "Request sent"),
+      text: tx(`Lena meldet sich zu „${name}“ und bespricht mit euch, was das Tool können soll.`, `Lena will get in touch about “${name}” and talk through what the tool should do.`),
+    });
 
   return (
     <>
       <section className="stack gap-20">
         <div className="row" style={{ justifyContent: "space-between" }}>
-          <h2 className="label">Eure Tools · {aktiveTools.length}</h2>
+          <h2 className="label">{tx("Eure Tools", "Your tools")} · {aktiveTools.length}</h2>
           <AnsichtUmschalter ansicht={ansicht} onChange={setAnsicht} />
         </div>
         {ansicht === "kacheln" ? (
@@ -50,8 +57,8 @@ export function StudioTools() {
             <div className="liste-kopf label">
               <span />
               <span>Tool</span>
-              <span className="nur-breit">Wofür</span>
-              <span className="nur-breit">Nutzt</span>
+              <span className="nur-breit">{tx("Wofür", "What for")}</span>
+              <span className="nur-breit">{tx("Nutzt", "Uses")}</span>
               <span />
             </div>
             {aktiveTools.map((t) => {
@@ -60,8 +67,8 @@ export function StudioTools() {
                   <span className="liste-icon"><span className="circle" style={{ width: 32, height: 32 }}><ArrowTool size={16} /></span></span>
                   <span className="liste-name">{t.name}</span>
                   <span className="liste-text nur-breit">{t.text}</span>
-                  <span className="liste-text nur-breit">{t.nutzt.replace("nutzt ", "")}</span>
-                  <span className="liste-ende bold small" style={{ color: "var(--white)" }}>Öffnen →</span>
+                  <span className="liste-text nur-breit">{t.nutzt.replace(/^(nutzt|uses) /, "")}</span>
+                  <span className="liste-ende bold small" style={{ color: "var(--white)" }}>{tx("Öffnen →", "Open →")}</span>
                 </>
               );
               return t.href ? (
@@ -75,12 +82,12 @@ export function StudioTools() {
       </section>
 
       <section className="stack gap-20">
-        <h2 className="label">Weitere Tools, die wir für euch bauen können</h2>
+        <h2 className="label">{tx("Weitere Tools, die wir für euch bauen können", "More tools we can build for you")}</h2>
         {ansicht === "kacheln" ? (
           <div className="grid grid-4">
             {weitereTools.map((t) => (
               <div key={t.slug} className="card tool">
-                <span className="tag" style={{ alignSelf: "flex-start" }}>auf Anfrage</span>
+                <span className="tag" style={{ alignSelf: "flex-start" }}>{t.nutzt}</span>
                 <div className="stack gap-8">
                   <span className="h3">{titel(t.name)}</span>
                   <span className="muted">{t.text}</span>
@@ -97,17 +104,17 @@ export function StudioTools() {
                 <span className="liste-icon"><span className="state-icon" style={{ width: 32, height: 32, fontSize: 16 }}>+</span></span>
                 <span className="liste-name">{t.name}</span>
                 <span className="liste-text nur-breit">{t.text}</span>
-                <span className="liste-text nur-breit">auf Anfrage</span>
-                <span className="liste-ende"><button className="pill" onClick={() => anfragen(t.name)}>Anfragen</button></span>
+                <span className="liste-text nur-breit">{t.nutzt}</span>
+                <span className="liste-ende"><button className="pill" onClick={() => anfragen(t.name)}>{tx("Anfragen", "Request")}</button></span>
               </div>
             ))}
             <button
               className="liste-zeile"
-              onClick={() => toast({ titel: "Danke für die Idee", text: "Lena meldet sich bei dir, um zu klären, was euch fehlt." })}
+              onClick={() => toast({ titel: tx("Danke für die Idee", "Thanks for the idea"), text: tx("Lena meldet sich bei dir, um zu klären, was euch fehlt.", "Lena will get in touch to find out what you're missing.") })}
             >
               <span className="liste-icon"><span className="state-icon" style={{ width: 32, height: 32, fontSize: 16, borderStyle: "dashed" }}>+</span></span>
-              <span className="liste-name">Tool anfragen</span>
-              <span className="liste-text nur-breit">Euch fehlt etwas? Wir bauen es.</span>
+              <span className="liste-name">{tx("Tool anfragen", "Request a tool")}</span>
+              <span className="liste-text nur-breit">{tx("Euch fehlt etwas? Wir bauen es.", "Missing something? We'll build it.")}</span>
               <span className="nur-breit" />
               <span className="liste-ende muted" aria-hidden>→</span>
             </button>

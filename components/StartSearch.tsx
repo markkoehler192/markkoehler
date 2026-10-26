@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowRight } from "./Icons";
+import { useSprache } from "./Sprache";
 
 export function StartSearch() {
   const router = useRouter();
   const [q, setQ] = useState("");
+  const { t } = useSprache();
   return (
     <form
       className="start-search"
@@ -19,10 +21,10 @@ export function StartSearch() {
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Suchen oder fragen, z. B. „Logo als PNG“"
-        aria-label="Suchen oder fragen"
+        placeholder={t("Suchen oder fragen, z. B. „Logo als PNG“", "Search or ask, e.g. “logo as PNG”")}
+        aria-label={t("Suchen oder fragen", "Search or ask")}
       />
-      <button className="circle" type="submit" aria-label="Suchen">
+      <button className="circle" type="submit" aria-label={t("Suchen", "Search")}>
         <ArrowRight />
       </button>
     </form>

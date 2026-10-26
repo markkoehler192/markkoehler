@@ -517,3 +517,37 @@ a.liste-zeile:hover, button.liste-zeile:hover { background: #222; }
 .kanal-logo { flex: none; display: block; }
 .top-thumb-logo { display: flex; align-items: center; justify-content: center; color: var(--white); }
 .plan-art .kanal-logo { display: inline-block; vertical-align: -2px; margin-right: 6px; }
+
+/* Menü am Benutzernamen */
+.nutzer { position: relative; }
+.nutzer-knopf { display: flex; align-items: center; gap: 16px; color: var(--white); border-radius: 999px; }
+.nutzer-knopf:hover .avatar-user, .nutzer-knopf[aria-expanded="true"] .avatar-user { border-color: var(--white); }
+.nutzer-menu {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 50; width: 280px;
+  display: flex; flex-direction: column; padding: 8px;
+  background: var(--card); border: var(--border); border-radius: 20px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+.nutzer-kopf { display: flex; flex-direction: column; gap: 2px; padding: 12px 12px 14px; border-bottom: var(--border); margin-bottom: 6px; }
+.nutzer-eintrag { display: block; width: 100%; text-align: left; padding: 12px; border-radius: 12px; color: var(--white); font-size: 15px; }
+.nutzer-eintrag:hover { background: var(--line); }
+.nutzer-sprache { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-top: var(--border); border-bottom: var(--border); margin: 6px 0; }
+.nutzer-abmelden { color: var(--muted); }
+@media (max-width: 720px) {
+  .nutzer-menu { right: -8px; width: min(280px, calc(100vw - 32px)); }
+}
+
+/* Account und Einstellungen */
+.konto-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.konto-daten { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px 16px; margin: 0; }
+.konto-daten dt { color: var(--muted); font-size: 14px; }
+.konto-daten dd { margin: 0; color: var(--white); font-size: 15px; overflow-wrap: anywhere; }
+.schalter-zeile { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: var(--border); cursor: pointer; }
+.schalter-zeile:first-child { border-top: 0; padding-top: 0; }
+.schalter { appearance: none; flex: none; width: 48px; height: 28px; border-radius: 999px; background: var(--line); position: relative; cursor: pointer; transition: background 0.15s; }
+.schalter::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--white); transition: transform 0.15s; }
+.schalter:checked { background: var(--lime); }
+.schalter:checked::after { transform: translateX(20px); background: #000; }
+.schalter:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+@media (max-width: 900px) { .konto-layout { grid-template-columns: 1fr; } }
+.team-zeile { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 0; border-top: var(--border); }
+.team-zeile:first-child { border-top: 0; padding-top: 0; }

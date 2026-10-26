@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
+import { useSprache } from "./Sprache";
 
 export type ToastInput = {
   titel: string;
@@ -20,6 +21,7 @@ export function useToast() {
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const nextId = useRef(1);
+  const { t: tx } = useSprache();
 
   const close = useCallback((id: number) => setToasts((all) => all.filter((t) => t.id !== id)), []);
 
@@ -58,7 +60,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 </button>
               ) : null}
             </div>
-            <button className="toast-close" aria-label="Schließen" onClick={() => close(t.id)}>×</button>
+            <button className="toast-close" aria-label={tx("Schließen", "Close")} onClick={() => close(t.id)}>×</button>
           </div>
         ))}
       </div>
