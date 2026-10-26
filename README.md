@@ -52,9 +52,9 @@ einkommentieren.
 
 ## Vorschau
 
-Am einfachsten über Vercel: Repository unter vercel.com importieren, Framework „Next.js“
-wird erkannt, Region `fra1` (Frankfurt). Danach bekommt jeder Pull Request automatisch
-einen eigenen Vorschau-Link.
+Über Vercel: Repository unter vercel.com/new importieren, Framework „Next.js“ wird erkannt.
+Die Region Frankfurt (`fra1`) ist in `vercel.json` festgelegt. Danach bekommt jeder
+Pull Request automatisch einen eigenen Vorschau-Link, `main` ist die Live-Version.
 
 ## Nächste Schritte
 
