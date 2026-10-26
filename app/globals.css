@@ -514,3 +514,6 @@ a.liste-zeile:hover, button.liste-zeile:hover { background: #222; }
 /* ---------- LIVE: Channel-Auswahl ---------- */
 .kanal-leiste { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 16px 20px; border: var(--border); border-radius: 20px; background: var(--card); margin-top: -24px; }
 .kpi-delta.is-minus { color: var(--muted); }
+.kanal-logo { flex: none; display: block; }
+.top-thumb-logo { display: flex; align-items: center; justify-content: center; color: var(--white); }
+.plan-art .kanal-logo { display: inline-block; vertical-align: -2px; margin-right: 6px; }

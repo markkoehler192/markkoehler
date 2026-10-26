@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Chips } from "@/components/Chips";
+import { KanalLogo } from "@/components/KanalLogo";
 import { useToast } from "@/components/Toast";
 import {
   kanaele,
@@ -59,7 +60,21 @@ export function Live() {
 
       <div className="kanal-leiste">
         <span className="label">Channel</span>
-        <Chips options={kanaele} value={kanal} onChange={setKanal} label="Channel" />
+        <div className="row wrap gap-8" role="radiogroup" aria-label="Channel">
+          {kanaele.map((k) => (
+            <button
+              key={k}
+              type="button"
+              role="radio"
+              aria-checked={k === kanal}
+              className={`pill${k === kanal ? " is-selected" : ""}`}
+              onClick={() => setKanal(k)}
+            >
+              <KanalLogo kanal={k} />
+              {k}
+            </button>
+          ))}
+        </div>
         {kanal === "Alle" || kanalInfo[kanal] !== kanal ? (
           <span className="small muted">{kanal === "Alle" ? "Alle Channels zusammen" : kanalInfo[kanal]}</span>
         ) : null}
@@ -102,10 +117,10 @@ export function Live() {
           <h2 className="h3" style={{ fontSize: 18 }}>Das lief am besten</h2>
           {topPostsJeKanal[kanal].map((p) => (
             <div key={p.titel} className="top-post">
-              <span className="top-thumb" />
+              <span className="top-thumb top-thumb-logo"><KanalLogo kanal={p.kanal} size={18} /></span>
               <span className="stack" style={{ gap: 2 }}>
                 <span className="bold small" style={{ color: "var(--white)" }}>{p.titel}</span>
-                <span className="small muted">{kanal === "Alle" ? `${p.kanal} · ` : ""}{p.wert}</span>
+                <span className="small muted">{p.wert}</span>
                 <button
                   className="link-lime"
                   style={{ textAlign: "left" }}
@@ -139,7 +154,7 @@ export function Live() {
               <span className="day-name">{d.tag}</span>
               {d.posts.filter((x) => sichtbar(x.kanal)).map((x) => (
                 <div key={x.titel} className={`plan ${x.status === "Geplant" ? "is-geplant" : "is-vorschlag"}`}>
-                  <span className="plan-art">{x.kanal} · {x.art} · {x.status}</span>
+                  <span className="plan-art"><KanalLogo kanal={x.kanal} size={12} />{x.art} · {x.status}</span>
                   <span className="plan-titel">{x.titel}</span>
                   {x.status === "Vorschlag" ? <button onClick={() => freigeben(i, x.titel)}>Freigeben</button> : null}
                 </div>
