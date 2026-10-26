@@ -4,19 +4,21 @@ import Link from "next/link";
 import { AnsichtUmschalter, useAnsicht } from "@/components/Ansicht";
 import { FolderIcon } from "@/components/Icons";
 import { useToast } from "@/components/Toast";
-import { ordner, zuletztHinzugefuegt } from "@/lib/data";
+import { useSprache } from "@/components/Sprache";
 
 const dateityp = (name: string) => name.split(".").pop()?.toUpperCase() ?? "";
 
 export function ArchiveInhalt() {
   const [ansicht, setAnsicht] = useAnsicht();
   const toast = useToast();
+  const { t, d } = useSprache();
+  const { ordner, zuletztHinzugefuegt } = d;
 
   return (
     <>
       <section className="stack gap-20">
         <div className="row" style={{ justifyContent: "space-between" }}>
-          <h2 className="label">Ordner</h2>
+          <h2 className="label">{t("Ordner", "Folders")}</h2>
           <AnsichtUmschalter ansicht={ansicht} onChange={setAnsicht} />
         </div>
 
@@ -28,7 +30,7 @@ export function ArchiveInhalt() {
                   <FolderIcon />
                   <span className="stack" style={{ alignItems: "flex-end", gap: 4 }}>
                     <span className="small muted">{o.anzahl}</span>
-                    {o.neu ? <span className="neu-hinweis">{o.neu} neu</span> : null}
+                    {o.neu ? <span className="neu-hinweis">{o.neu} {t("neu", "new")}</span> : null}
                   </span>
                 </div>
                 <div className="stack gap-8">
@@ -43,8 +45,8 @@ export function ArchiveInhalt() {
             <div className="liste-kopf label">
               <span />
               <span>Name</span>
-              <span className="nur-breit">Inhalt</span>
-              <span className="nur-breit">Umfang</span>
+              <span className="nur-breit">{t("Inhalt", "Contents")}</span>
+              <span className="nur-breit">{t("Umfang", "Size")}</span>
               <span />
             </div>
             {ordner.map((o) => (
@@ -54,7 +56,7 @@ export function ArchiveInhalt() {
                 <span className="liste-text nur-breit">{o.text}</span>
                 <span className="liste-text nur-breit">{o.anzahl}</span>
                 <span className="liste-ende">
-                  {o.neu ? <span className="neu-hinweis">{o.neu} neu</span> : null}
+                  {o.neu ? <span className="neu-hinweis">{o.neu} {t("neu", "new")}</span> : null}
                   <span className="muted" aria-hidden>→</span>
                 </span>
               </Link>
@@ -65,8 +67,8 @@ export function ArchiveInhalt() {
 
       <section className="stack gap-20">
         <div className="row" style={{ justifyContent: "space-between" }}>
-          <h2 className="h2">Zuletzt hinzugefügt</h2>
-          <Link href="/archive/bilder" className="label" style={{ color: "var(--white)" }}>Alle anzeigen →</Link>
+          <h2 className="h2">{t("Zuletzt hinzugefügt", "Recently added")}</h2>
+          <Link href="/archive/bilder" className="label" style={{ color: "var(--white)" }}>{t("Alle anzeigen →", "Show all →")}</Link>
         </div>
         {ansicht === "kacheln" ? (
           <div className="grid grid-4">
@@ -85,8 +87,8 @@ export function ArchiveInhalt() {
             <div className="liste-kopf label">
               <span />
               <span>Name</span>
-              <span className="nur-breit">Ort</span>
-              <span className="nur-breit">Typ</span>
+              <span className="nur-breit">{t("Ort", "Location")}</span>
+              <span className="nur-breit">{t("Typ", "Type")}</span>
               <span />
             </div>
             {zuletztHinzugefuegt.map((f) => (
@@ -96,7 +98,7 @@ export function ArchiveInhalt() {
                 <span className="liste-text nur-breit">{f.ort}</span>
                 <span className="liste-text nur-breit">{dateityp(f.name)}</span>
                 <span className="liste-ende">
-                  <button className="link-lime" onClick={() => toast({ titel: "Download startet", text: f.name })}>Download</button>
+                  <button className="link-lime" onClick={() => toast({ titel: t("Download startet", "Download starting"), text: f.name })}>Download</button>
                 </span>
               </div>
             ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSprache } from "./Sprache";
 
 export type Ansicht = "kacheln" | "liste";
 
@@ -46,12 +47,13 @@ const ListeIcon = () => (
 );
 
 export function AnsichtUmschalter({ ansicht, onChange }: { ansicht: Ansicht; onChange: (a: Ansicht) => void }) {
+  const { t } = useSprache();
   return (
-    <div className="ansicht" role="radiogroup" aria-label="Ansicht">
-      <button role="radio" aria-checked={ansicht === "kacheln"} aria-label="Kachelansicht" title="Kacheln" className={ansicht === "kacheln" ? "is-selected" : ""} onClick={() => onChange("kacheln")}>
+    <div className="ansicht" role="radiogroup" aria-label={t("Ansicht", "View")}>
+      <button role="radio" aria-checked={ansicht === "kacheln"} aria-label={t("Kachelansicht", "Tile view")} title={t("Kacheln", "Tiles")} className={ansicht === "kacheln" ? "is-selected" : ""} onClick={() => onChange("kacheln")}>
         <KachelIcon />
       </button>
-      <button role="radio" aria-checked={ansicht === "liste"} aria-label="Listenansicht" title="Liste" className={ansicht === "liste" ? "is-selected" : ""} onClick={() => onChange("liste")}>
+      <button role="radio" aria-checked={ansicht === "liste"} aria-label={t("Listenansicht", "List view")} title={t("Liste", "List")} className={ansicht === "liste" ? "is-selected" : ""} onClick={() => onChange("liste")}>
         <ListeIcon />
       </button>
     </div>

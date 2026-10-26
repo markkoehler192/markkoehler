@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
-import { assets, projektVonName } from "@/lib/data";
+import { assets } from "@/lib/data";
+import { getSprache } from "@/lib/sprache-server";
 import { Review } from "./Review";
 
 export function generateStaticParams() {
@@ -10,10 +11,11 @@ export function generateStaticParams() {
 
 export default async function ReviewSeite({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const a = assets.find((x) => x.slug === slug);
+  const { s, t, d } = await getSprache();
+  const a = d.assets.find((x) => x.slug === slug);
   if (!a) notFound();
   const version = a.meta.split(" · ").pop();
-  const projekt = projektVonName(a.projekt);
+  const projekt = d.projektVonName(a.projekt);
   return (
     <Shell>
       <div className="stack gap-12">
@@ -21,10 +23,10 @@ export default async function ReviewSeite({ params }: { params: Promise<{ slug: 
         <h1 className="h1">{a.titel}</h1>
         <p className="sub" style={{ marginTop: 0 }}>
           {a.projekt} · {a.meta.split(" · ").slice(0, 2).join(" ")} · {version?.replace("V", "Version ")} ·{" "}
-          <span style={{ color: "var(--white)", fontWeight: 800 }}>bitte {a.frist} freigeben</span>
+          <span style={{ color: "var(--white)", fontWeight: 800 }}>{t(`bitte ${a.frist} freigeben`, `please approve by ${a.frist.replace("due ", "")}`)}</span>
         </p>
       </div>
-      <Review asset={a} />
+      <Review key={s} asset={a} />
     </Shell>
   );
 }

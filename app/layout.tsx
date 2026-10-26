@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/Footer";
+import { SpracheProvider } from "@/components/Sprache";
 import { ToastProvider } from "@/components/Toast";
 import { TopBar } from "@/components/TopBar";
+import { getSprache } from "@/lib/sprache-server";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "WILDBLATT · KURIOS KI",
-  description: "Kundenoberfläche von KURIOS (Prototyp mit Beispieldaten)",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getSprache();
+  return {
+    title: t("WILDBLATT · KURIOS KI", "WILDBLATT · KURIOS AI"),
+    description: t("Kundenoberfläche von KURIOS (Prototyp mit Beispieldaten)", "KURIOS client portal (prototype with sample data)"),
+  };
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const { s } = await getSprache();
   return (
-    <html lang="de">
+    <html lang={s}>
       <head>
         {/* Ersatzschriften, bis die Weblizenzen für Haben Grotesk und Area Normal da sind */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,11 +29,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <ToastProvider>
-          <TopBar />
-          {children}
-          <Footer />
-        </ToastProvider>
+        <SpracheProvider sprache={s}>
+          <ToastProvider>
+            <TopBar />
+            {children}
+            <Footer />
+          </ToastProvider>
+        </SpracheProvider>
       </body>
     </html>
   );

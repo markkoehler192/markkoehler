@@ -3,25 +3,18 @@
 import { useState } from "react";
 import { Chips } from "@/components/Chips";
 import { KanalLogo } from "@/components/KanalLogo";
+import { useSprache } from "@/components/Sprache";
 import { useToast } from "@/components/Toast";
-import {
-  kanaele,
-  kanalInfo,
-  kennzahlenJeKanal,
-  reichweiteJeKanal,
-  socialPlanung,
-  topHinweisJeKanal,
-  topPostsJeKanal,
-  type Kanal,
-} from "@/lib/data";
+import type { Kanal } from "@/lib/data";
 
 const zeitraeume = ["7 Tage", "30 Tage", "Kampagne"] as const;
 
 function Info({ text }: { text: string }) {
   const [offen, setOffen] = useState(false);
+  const { t } = useSprache();
   return (
     <span className="info">
-      <button className="info-btn" aria-label="Was heißt das?" aria-expanded={offen} onClick={() => setOffen(!offen)} onBlur={() => setOffen(false)}>i</button>
+      <button className="info-btn" aria-label={t("Was heißt das?", "What does this mean?")} aria-expanded={offen} onClick={() => setOffen(!offen)} onBlur={() => setOffen(false)}>i</button>
       {offen ? <span className="info-pop" role="tooltip">{text}</span> : null}
     </span>
   );
@@ -29,6 +22,8 @@ function Info({ text }: { text: string }) {
 
 export function Live() {
   const toast = useToast();
+  const { t, w, d } = useSprache();
+  const { kanaele, kanalInfo, kennzahlenJeKanal, reichweiteJeKanal, socialPlanung, topHinweisJeKanal, topPostsJeKanal } = d;
   const [zeitraum, setZeitraum] = useState<(typeof zeitraeume)[number]>("30 Tage");
   const [kanal, setKanal] = useState<Kanal>("Alle");
   const [plan, setPlan] = useState(socialPlanung);
@@ -37,13 +32,19 @@ export function Live() {
   const wochen = reichweiteJeKanal[kanal];
   const max = Math.max(...wochen.map((w) => w.wert));
   const top = wochen.find((w) => w.wert === max)!;
-  const wochenwert = (w: number) => (w < 10 ? `${w.toLocaleString("de-DE")} Tsd.` : `${Math.round(w)} Tsd.`);
+  const wochenwert = (x: number) => {
+    const zahl = x < 10 ? x.toLocaleString(t("de-DE", "en-GB")) : String(Math.round(x));
+    return t(`${zahl} Tsd.`, `${zahl}K`);
+  };
 
   const freigeben = (tagIndex: number, titel: string) => {
     setPlan((p) =>
       p.map((t, i) => (i === tagIndex ? { ...t, posts: t.posts.map((x) => (x.titel === titel ? { ...x, status: "Geplant" as const } : x)) } : t)),
     );
-    toast({ titel: "Post freigegeben", text: `„${titel}“ geht am ${plan[tagIndex].tag} raus. Lena kümmert sich um den Rest.` });
+    toast({
+      titel: t("Post freigegeben", "Post approved"),
+      text: t(`„${titel}“ geht am ${plan[tagIndex].tag} raus. Lena kümmert sich um den Rest.`, `“${titel}” goes out on ${plan[tagIndex].tag}. Lena takes care of the rest.`),
+    });
   };
 
   const sichtbar = (k: string) => kanal === "Alle" || k === kanal;
@@ -53,14 +54,14 @@ export function Live() {
       <div className="head-row">
         <div>
           <h1 className="h1">Live</h1>
-          <p className="sub">Was gerade läuft, wie es ankommt und was als Nächstes kommt.</p>
+          <p className="sub">{t("Was gerade läuft, wie es ankommt und was als Nächstes kommt.", "What's running, how it's landing and what's coming next.")}</p>
         </div>
-        <Chips options={zeitraeume} value={zeitraum} onChange={setZeitraum} label="Zeitraum" />
+        <Chips options={zeitraeume} value={zeitraum} onChange={setZeitraum} label={t("Zeitraum", "Period")} anzeige={w} />
       </div>
 
       <div className="kanal-leiste">
         <span className="label">Channel</span>
-        <div className="row wrap gap-8" role="radiogroup" aria-label="Channel">
+        <div className="row wrap gap-8" role="radiogroup" aria-label={t("Channel", "Channel")}>
           {kanaele.map((k) => (
             <button
               key={k}
@@ -71,12 +72,12 @@ export function Live() {
               onClick={() => setKanal(k)}
             >
               <KanalLogo kanal={k} />
-              {k}
+              {w(k)}
             </button>
           ))}
         </div>
         {kanal === "Alle" || kanalInfo[kanal] !== kanal ? (
-          <span className="small muted">{kanal === "Alle" ? "Alle Channels zusammen" : kanalInfo[kanal]}</span>
+          <span className="small muted">{kanal === "Alle" ? t("Alle Channels zusammen", "All channels combined") : kanalInfo[kanal]}</span>
         ) : null}
       </div>
 
@@ -96,25 +97,28 @@ export function Live() {
       <div className="live-layout">
         <div className="card card-pad">
           <h2 className="h3" style={{ fontSize: 18 }}>
-            Wie viele Leute euch gesehen haben, pro Woche{kanal === "Alle" ? "" : ` · ${kanal}`}
+            {t("Wie viele Leute euch gesehen haben, pro Woche", "How many people saw you, per week")}{kanal === "Alle" ? "" : ` · ${kanal}`}
           </h2>
-          <div className="chart" role="img" aria-label={`Balkendiagramm: Reichweite pro Woche, höchster Wert in KW ${top.kw} mit ${top.wert} Tausend`}>
-            {wochen.map((w) => (
-              <div key={w.kw} className={`chart-bar${w.kw === top.kw ? " is-top" : ""}`} style={{ height: `${(w.wert / max) * 100}%` }}>
-                <span className="chart-val">{wochenwert(w.wert)}</span>
+          <div className="chart" role="img" aria-label={t(`Balkendiagramm: Reichweite pro Woche, höchster Wert in KW ${top.kw} mit ${top.wert} Tausend`, `Bar chart: reach per week, highest in week ${top.kw} with ${top.wert} thousand`)}>
+            {wochen.map((x) => (
+              <div key={x.kw} className={`chart-bar${x.kw === top.kw ? " is-top" : ""}`} style={{ height: `${(x.wert / max) * 100}%` }}>
+                <span className="chart-val">{wochenwert(x.wert)}</span>
               </div>
             ))}
           </div>
           <div className="chart-x" aria-hidden>
-            {wochen.map((w, i) => <span key={w.kw}>{i === 0 ? `KW ${w.kw}` : w.kw}</span>)}
+            {wochen.map((x, i) => <span key={x.kw}>{i === 0 ? `${t("KW", "CW")} ${x.kw}` : x.kw}</span>)}
           </div>
           <p className="small muted" style={{ margin: "24px 0 0" }}>
-            Höchster Wert in KW {top.kw}: Launch der Ringelblumen-Creme am 14.10. mit {wochenwert(top.wert)} Leuten.
+            {t(
+              `Höchster Wert in KW ${top.kw}: Launch der Ringelblumen-Creme am 14.10. mit ${wochenwert(top.wert)} Leuten.`,
+              `Highest in week ${top.kw}: launch of the Calendula Cream on Oct 14 with ${wochenwert(top.wert)} people.`,
+            )}
           </p>
         </div>
 
         <div className="card card-pad stack gap-16">
-          <h2 className="h3" style={{ fontSize: 18 }}>Das lief am besten</h2>
+          <h2 className="h3" style={{ fontSize: 18 }}>{t("Das lief am besten", "What worked best")}</h2>
           {topPostsJeKanal[kanal].map((p) => (
             <div key={p.titel} className="top-post">
               <span className="top-thumb top-thumb-logo"><KanalLogo kanal={p.kanal} size={18} /></span>
@@ -124,9 +128,15 @@ export function Live() {
                 <button
                   className="link-lime"
                   style={{ textAlign: "left" }}
-                  onClick={() => toast({ titel: "Briefing vorbereitet", text: `Der Briefing-Agent startet mit „Mehr wie ${p.titel}“.`, aktion: { label: "Zum Briefing →", href: "/projects/briefing" } })}
+                  onClick={() =>
+                    toast({
+                      titel: t("Briefing vorbereitet", "Briefing prepared"),
+                      text: t(`Der Briefing-Agent startet mit „Mehr wie ${p.titel}“.`, `The briefing agent starts with “More like ${p.titel}”.`),
+                      aktion: { label: t("Zum Briefing →", "Go to briefing →"), href: "/projects/briefing" },
+                    })
+                  }
                 >
-                  Mehr davon briefen →
+                  {t("Mehr davon briefen →", "Brief more of this →")}
                 </button>
               </span>
             </div>
@@ -138,14 +148,22 @@ export function Live() {
       <section id="planung" className="card card-pad stack gap-20">
         <div className="row wrap gap-16" style={{ justifyContent: "space-between" }}>
           <div className="stack gap-8">
-            <h2 className="h3" style={{ fontSize: 18 }}>Social-Planung · KW 44{kanal === "Alle" ? "" : ` · ${kanal}`}</h2>
-            <span className="small muted">Der Social-Planer schlägt Posts vor, ihr gebt frei.</span>
+            <h2 className="h3" style={{ fontSize: 18 }}>{t("Social-Planung · KW 44", "Social planning · Week 44")}{kanal === "Alle" ? "" : ` · ${kanal}`}</h2>
+            <span className="small muted">{t("Der Social-Planer schlägt Posts vor, ihr gebt frei.", "The social planner suggests posts, you approve them.")}</span>
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => toast({ titel: "Post-Wunsch gesendet", text: `Der Social-Planer macht einen Vorschlag${kanal === "Alle" ? "" : ` für ${kanal}`}, Lena prüft ihn.` })}
+            onClick={() =>
+              toast({
+                titel: t("Post-Wunsch gesendet", "Post request sent"),
+                text: t(
+                  `Der Social-Planer macht einen Vorschlag${kanal === "Alle" ? "" : ` für ${kanal}`}, Lena prüft ihn.`,
+                  `The social planner will make a suggestion${kanal === "Alle" ? "" : ` for ${kanal}`}, Lena will check it.`,
+                ),
+              })
+            }
           >
-            + Post planen
+            {t("+ Post planen", "+ Plan a post")}
           </button>
         </div>
         <div className="week">
@@ -154,9 +172,9 @@ export function Live() {
               <span className="day-name">{d.tag}</span>
               {d.posts.filter((x) => sichtbar(x.kanal)).map((x) => (
                 <div key={x.titel} className={`plan ${x.status === "Geplant" ? "is-geplant" : "is-vorschlag"}`}>
-                  <span className="plan-art"><KanalLogo kanal={x.kanal} size={12} />{x.art} · {x.status}</span>
+                  <span className="plan-art"><KanalLogo kanal={x.kanal} size={12} />{x.art} · {w(x.status)}</span>
                   <span className="plan-titel">{x.titel}</span>
-                  {x.status === "Vorschlag" ? <button onClick={() => freigeben(i, x.titel)}>Freigeben</button> : null}
+                  {x.status === "Vorschlag" ? <button onClick={() => freigeben(i, x.titel)}>{t("Freigeben", "Approve")}</button> : null}
                 </div>
               ))}
             </div>

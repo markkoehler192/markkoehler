@@ -3,13 +3,18 @@
 
 export const kunde = {
   name: "WILDBLATT Naturkosmetik",
-  nutzer: { vorname: "Julia", initialen: "JS" },
+  nutzer: { vorname: "Julia", nachname: "Sommer", initialen: "JS", email: "julia.sommer@wildblatt.de", rolle: "Marketing-Leitung" },
   ansprechperson: {
     name: "Lena Kurz",
     vorname: "Lena",
     initialen: "LK",
     rolle: "deine Ansprechpartnerin bei KURIOS",
   },
+  team: [
+    { name: "Julia Sommer", rolle: "Marketing-Leitung", rechte: "Alles, inkl. Freigaben" },
+    { name: "Tom Becker", rolle: "Social Media", rechte: "Archive, Studio, Live" },
+    { name: "Mara Ilić", rolle: "Produktmanagement", rechte: "Archive, Projects (nur ansehen)" },
+  ],
 };
 
 export const offeneAufgaben = [
@@ -157,7 +162,7 @@ export const kanalInfo: Record<Exclude<Kanal, "Alle">, string> = {
   LinkedIn: "LinkedIn",
 };
 
-type Kennzahl = { titel: string; wert: string; delta: string; info: string };
+export type Kennzahl = { titel: string; wert: string; delta: string; info: string };
 
 const kz = (gesehen: string, dGesehen: string, reagiert: string, quote: string, dQuote: string, klicks: string, dKlicks: string, follower: string, dFollower: string): Kennzahl[] => [
   { titel: "So viele haben euch gesehen", wert: gesehen, delta: dGesehen, info: "Reichweite: so viele verschiedene Leute haben mindestens einen eurer Beiträge gesehen." },
