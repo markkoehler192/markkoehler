@@ -85,7 +85,7 @@ export const markenwissen = ["CI", "Bilder", "Markensprache", "Produktinfos"];
 export type Tool = { slug: string; name: string; nutzt: string; text: string; href?: string };
 
 export const aktiveTools: Tool[] = [
-  { slug: "brand-bilder", name: "KI-Brand-Bilder", nutzt: "nutzt CI + Bilder", text: "Bilder und Key Visuals im Look eurer Marke erstellen." },
+  { slug: "brand-bilder", name: "KI-Brand-Bilder", nutzt: "nutzt CI + Bilder", text: "Bilder und Key Visuals im Look eurer Marke erstellen.", href: "/studio/brand-bilder" },
   { slug: "markentexter", name: "KI-Markentexter", nutzt: "nutzt Markensprache", text: "Texte für jeden Kanal, direkt in eurer Markensprache.", href: "/studio/markentexter" },
   { slug: "format-anpasser", name: "KI-Format-Anpasser", nutzt: "nutzt CI + Bilder", text: "Ein Motiv, alle Formate: Feed, Story, Plakat, Banner." },
   { slug: "marken-chat", name: "KI-Marken-Chat", nutzt: "nutzt ganzes Archive", text: "Frag alles zu Marke, Kampagnen und Archiv." },

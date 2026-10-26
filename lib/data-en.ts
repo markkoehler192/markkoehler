@@ -70,7 +70,7 @@ const bilder: Bild[] = [
 const markenwissen = ["CI", "Images", "Brand voice", "Product info"];
 
 const aktiveTools: Tool[] = [
-  { slug: "brand-bilder", name: "AI Brand Images", nutzt: "uses CI + images", text: "Create images and key visuals in your brand's look." },
+  { slug: "brand-bilder", name: "AI Brand Images", nutzt: "uses CI + images", text: "Create images and key visuals in your brand's look.", href: "/studio/brand-bilder" },
   { slug: "markentexter", name: "AI Brand Writer", nutzt: "uses brand voice", text: "Copy for every channel, written in your brand voice.", href: "/studio/markentexter" },
   { slug: "format-anpasser", name: "AI Format Adapter", nutzt: "uses CI + images", text: "One visual, every format: feed, story, poster, banner." },
   { slug: "marken-chat", name: "AI Brand Chat", nutzt: "uses the whole archive", text: "Ask anything about your brand, campaigns and archive." },
