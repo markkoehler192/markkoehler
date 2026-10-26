@@ -29,7 +29,7 @@ function antwort(q: string, treffer: Treffer[]) {
   const l = q.toLowerCase();
   if (l.includes("logo")) {
     return {
-      text: "Euer weißes Logo liegt im Archive unter CI / Logo. Für Instagram passt das quadratische PNG mit 1080 px. Soll ich es mit dem Format-Anpasser auf euer Profilbild zuschneiden?",
+      text: "Euer weißes Logo liegt im Archive unter CI / Logo. Für Instagram passt das quadratische PNG mit 1080 px. Soll ich es mit dem KI-Format-Anpasser auf euer Profilbild zuschneiden?",
       quelle: "CI / Brand Guide, Seite 4",
     };
   }

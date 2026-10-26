@@ -80,16 +80,16 @@ export const markenwissen = ["CI", "Bilder", "Markensprache", "Produktinfos"];
 export type Tool = { slug: string; name: string; nutzt: string; text: string; href?: string };
 
 export const aktiveTools: Tool[] = [
-  { slug: "brand-bilder", name: "Brand-Bilder", nutzt: "nutzt CI + Bilder", text: "Bilder und Key Visuals im Look eurer Marke erstellen." },
-  { slug: "markentexter", name: "Markentexter", nutzt: "nutzt Markensprache", text: "Texte für jeden Kanal, direkt in eurer Markensprache.", href: "/studio/markentexter" },
-  { slug: "format-anpasser", name: "Format-Anpasser", nutzt: "nutzt CI + Bilder", text: "Ein Motiv, alle Formate: Feed, Story, Plakat, Banner." },
-  { slug: "marken-chat", name: "Marken-Chat", nutzt: "nutzt ganzes Archive", text: "Frag alles zu Marke, Kampagnen und Archiv." },
+  { slug: "brand-bilder", name: "KI-Brand-Bilder", nutzt: "nutzt CI + Bilder", text: "Bilder und Key Visuals im Look eurer Marke erstellen." },
+  { slug: "markentexter", name: "KI-Markentexter", nutzt: "nutzt Markensprache", text: "Texte für jeden Kanal, direkt in eurer Markensprache.", href: "/studio/markentexter" },
+  { slug: "format-anpasser", name: "KI-Format-Anpasser", nutzt: "nutzt CI + Bilder", text: "Ein Motiv, alle Formate: Feed, Story, Plakat, Banner." },
+  { slug: "marken-chat", name: "KI-Marken-Chat", nutzt: "nutzt ganzes Archive", text: "Frag alles zu Marke, Kampagnen und Archiv." },
 ];
 
 export const weitereTools: Tool[] = [
-  { slug: "ci-check", name: "CI-Check", nutzt: "auf Anfrage", text: "Prüft Entwürfe auf Farben, Schrift, Logo und Ton." },
-  { slug: "kampagnen-ideen", name: "Kampagnen-Ideen", nutzt: "auf Anfrage", text: "Ideen, Claims und erste Skizzen für eure nächste Aktion." },
-  { slug: "uebersetzer", name: "Übersetzer", nutzt: "auf Anfrage", text: "Übersetzt Texte und bleibt dabei in eurer Tonalität." },
+  { slug: "ci-check", name: "KI-CI-Check", nutzt: "auf Anfrage", text: "Prüft Entwürfe auf Farben, Schrift, Logo und Ton." },
+  { slug: "kampagnen-ideen", name: "KI-Kampagnen-Ideen", nutzt: "auf Anfrage", text: "Ideen, Claims und erste Skizzen für eure nächste Aktion." },
+  { slug: "uebersetzer", name: "KI-Übersetzer", nutzt: "auf Anfrage", text: "Übersetzt Texte und bleibt dabei in eurer Tonalität." },
 ];
 
 export const markentexterVarianten = [
@@ -271,8 +271,8 @@ export const suchIndex: Treffer[] = [
   { bereich: "Projects", titel: "Social-Spot 15 Sek", meta: "Ringelblume 2026 · Logo im Abspann · Review offen", typ: "Asset", href: "/projects", stichworte: "social spot video logo ringelblume creme reel instagram" },
   { bereich: "Projects", titel: "Kampagnenbild „Blütezeit“", meta: "Ringelblume 2026 · Review offen", typ: "Asset", href: "/projects/review/bluetezeit", stichworte: "kampagnenbild blütezeit ringelblume creme post" },
   { bereich: "Projects", titel: "Briefing Rosen-Gesichtsöl", meta: "3 Fragen offen", typ: "Briefing", href: "/projects/briefing", stichworte: "briefing rosen gesichtsöl launch" },
-  { bereich: "Studio", titel: "Format-Anpasser", meta: "Ein Motiv, alle Formate: Feed, Story, Profilbild", typ: "Studio", href: "/studio", stichworte: "format anpasser instagram profilbild story feed logo zuschneiden" },
-  { bereich: "Studio", titel: "Markentexter", meta: "Texte für jeden Kanal, in eurer Markensprache", typ: "Studio", href: "/studio/markentexter", stichworte: "markentexter text post creme instagram newsletter" },
+  { bereich: "Studio", titel: "KI-Format-Anpasser", meta: "Ein Motiv, alle Formate: Feed, Story, Profilbild", typ: "Studio", href: "/studio", stichworte: "format anpasser instagram profilbild story feed logo zuschneiden" },
+  { bereich: "Studio", titel: "KI-Markentexter", meta: "Texte für jeden Kanal, in eurer Markensprache", typ: "Studio", href: "/studio/markentexter", stichworte: "markentexter text post creme instagram newsletter" },
 ];
 
 // Projekte als erste Ebene in Projects. Assets und Präsentationen hängen über den Projektnamen dran.

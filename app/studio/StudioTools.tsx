@@ -7,6 +7,9 @@ import { useToast } from "@/components/Toast";
 import { ToolAnfragen } from "@/components/ToolAnfragen";
 import { aktiveTools, weitereTools, type Tool } from "@/lib/data";
 
+// Geschützter Bindestrich, damit „KI-“ in den Kacheln nicht allein in der ersten Zeile steht.
+const titel = (name: string) => name.replace(/^KI-/, "KI\u2011");
+
 export function StudioTools() {
   const [ansicht, setAnsicht] = useAnsicht();
   const toast = useToast();
@@ -30,7 +33,7 @@ export function StudioTools() {
                   <span className="tag" style={{ alignSelf: "flex-start" }}>{t.nutzt}</span>
                   <span className="circle"><ArrowTool /></span>
                   <div className="stack gap-8">
-                    <span className="h3">{t.name}</span>
+                    <span className="h3">{titel(t.name)}</span>
                     <span className="muted">{t.text}</span>
                   </div>
                 </>
@@ -79,7 +82,7 @@ export function StudioTools() {
               <div key={t.slug} className="card tool">
                 <span className="tag" style={{ alignSelf: "flex-start" }}>auf Anfrage</span>
                 <div className="stack gap-8">
-                  <span className="h3">{t.name}</span>
+                  <span className="h3">{titel(t.name)}</span>
                   <span className="muted">{t.text}</span>
                   <ToolAnfragen tool={t} modus="anfrage" />
                 </div>

@@ -48,7 +48,7 @@ export function ZustaendeDemo() {
           <EmptyState text="Sobald wir ein Asset für euch fertig haben, landet es in diesem Ordner.">
             <Link href="/projects/briefing" className="btn btn-primary">Briefing starten</Link>
           </EmptyState>
-          <LoadingState titel="Dein Text entsteht …" text="Der Markentexter liest eure Markensprache und schreibt. Dauert etwa 10 Sekunden." />
+          <LoadingState titel="Dein Text entsteht …" text="Der KI-Markentexter liest eure Markensprache und schreibt. Dauert etwa 10 Sekunden." />
           <ErrorState text="Der Text konnte gerade nicht erstellt werden. Dein Auftrag ist gespeichert." onRetry={() => toast({ titel: "Neuer Versuch läuft" })} />
         </div>
       </section>
